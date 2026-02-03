@@ -44,148 +44,158 @@ export default function Timer() {
     const getButtonClass = (btnMode: TimerMode) => {
         const isActiveMode = mode === btnMode;
         return `flex items-center gap-2 px-4 py-2 rounded-full text-sm font-medium transition-all ${isActiveMode
-                ? 'bg-zen-card shadow-md text-white ring-1 ring-white/10'
-                : 'text-zen-muted hover:text-zen-text hover:bg-zen-card/50'
+            ? 'bg-zen-card shadow-md text-white ring-1 ring-white/10'
+            : 'text-zen-muted hover:text-zen-text hover:bg-zen-card/50'
             }`;
     };
 
-    if (showSettings) {
-        return (
-            <div className="bg-zen-card p-8 rounded-3xl shadow-lg border border-zen-accent/10 flex flex-col h-[420px] relative overflow-hidden">
-                <div className="flex justify-between items-center mb-6">
-                    <h3 className="text-lg font-medium text-zen-text">Timer Settings</h3>
-                    <button onClick={() => setShowSettings(false)} className="text-zen-muted hover:text-zen-text">
-                        <X size={20} />
-                    </button>
-                </div>
-
-                <div className="flex-1 space-y-6">
-                    {/* Focus Duration */}
-                    <div className="space-y-2">
-                        <label className="text-sm text-zen-muted flex items-center gap-2">
-                            <Brain size={16} /> Focus (minutes)
-                        </label>
-                        <input
-                            type="number"
-                            value={localConfig.focus}
-                            onChange={(e) => setLocalConfig(prev => ({ ...prev, focus: parseInt(e.target.value) || 0 }))}
-                            className="w-full bg-zen-bg/50 rounded-xl py-2 px-4 text-zen-text focus:outline-none focus:ring-1 focus:ring-zen-primary"
-                        />
-                    </div>
-
-                    {/* Short Break Duration */}
-                    <div className="space-y-2">
-                        <label className="text-sm text-zen-muted flex items-center gap-2">
-                            <Coffee size={16} /> Short Break (minutes)
-                        </label>
-                        <input
-                            type="number"
-                            value={localConfig.shortBreak}
-                            onChange={(e) => setLocalConfig(prev => ({ ...prev, shortBreak: parseInt(e.target.value) || 0 }))}
-                            className="w-full bg-zen-bg/50 rounded-xl py-2 px-4 text-zen-text focus:outline-none focus:ring-1 focus:ring-zen-secondary"
-                        />
-                    </div>
-
-                    {/* Long Break Duration */}
-                    <div className="space-y-2">
-                        <label className="text-sm text-zen-muted flex items-center gap-2">
-                            <Zap size={16} /> Long Break (minutes)
-                        </label>
-                        <input
-                            type="number"
-                            value={localConfig.longBreak}
-                            onChange={(e) => setLocalConfig(prev => ({ ...prev, longBreak: parseInt(e.target.value) || 0 }))}
-                            className="w-full bg-zen-bg/50 rounded-xl py-2 px-4 text-zen-text focus:outline-none focus:ring-1 focus:ring-zen-accent"
-                        />
-                    </div>
-                </div>
-
-                <button
-                    onClick={handleSaveSettings}
-                    className="mt-6 w-full bg-zen-primary text-zen-bg font-medium py-3 rounded-xl hover:bg-opacity-90 transition-colors flex items-center justify-center gap-2"
-                >
-                    <Save size={18} /> Save Changes
-                </button>
-            </div>
-        )
-    }
-
     return (
-        <div className="bg-zen-card p-8 rounded-3xl shadow-lg border border-zen-accent/10 flex flex-col items-center justify-center relative overflow-hidden h-[420px]">
+        <div className="bg-zen-card p-8 rounded-3xl shadow-lg border border-zen-accent/10 flex flex-col items-center justify-center relative overflow-hidden min-h-[420px] h-full">
             {/* Background decoration */}
             <div className={`absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-current to-transparent opacity-20 ${getModeColor()}`} />
 
             {/* Settings Button */}
             <button
                 onClick={() => setShowSettings(true)}
-                className="absolute top-6 right-6 text-zen-muted hover:text-zen-text transition-colors"
+                className="absolute top-6 right-6 text-zen-muted hover:text-zen-text transition-colors z-10 hover:bg-zen-bg/50 p-2 rounded-full"
             >
                 <Settings size={20} />
             </button>
 
-            <div className="flex gap-2 mb-8 bg-zen-bg/50 p-1.5 rounded-full">
-                <button onClick={() => switchMode('focus')} className={getButtonClass('focus')}>
-                    <Brain size={16} /> Focus
-                </button>
-                <button onClick={() => switchMode('shortBreak')} className={getButtonClass('shortBreak')}>
-                    <Coffee size={16} /> Short
-                </button>
-                <button onClick={() => switchMode('longBreak')} className={getButtonClass('longBreak')}>
-                    <Zap size={16} /> Long
-                </button>
-            </div>
+            {/* Timer Display */}
+            <div className={`flex flex-col items-center w-full transition-all duration-300 ${showSettings ? 'scale-90 opacity-50 blur-sm' : 'scale-100 opacity-100'}`}>
+                <div className="flex gap-2 mb-8 bg-zen-bg/50 p-1.5 rounded-full">
+                    <button onClick={() => switchMode('focus')} className={getButtonClass('focus')}>
+                        <Brain size={16} /> Focus
+                    </button>
+                    <button onClick={() => switchMode('shortBreak')} className={getButtonClass('shortBreak')}>
+                        <Coffee size={16} /> Short
+                    </button>
+                    <button onClick={() => switchMode('longBreak')} className={getButtonClass('longBreak')}>
+                        <Zap size={16} /> Long
+                    </button>
+                </div>
 
-            <div className="relative mb-8 group">
-                <svg
-                    height={radius * 2}
-                    width={radius * 2}
-                    className="rotate-[-90deg] transform transition-all duration-300"
-                >
-                    <circle
-                        className="stroke-zen-bg"
-                        strokeWidth={stroke}
-                        fill="transparent"
-                        r={normalizedRadius}
-                        cx={radius}
-                        cy={radius}
-                    />
-                    <circle
-                        className={`${getModeColor()} transition-all duration-500 ease-in-out`}
-                        strokeWidth={stroke}
-                        strokeDasharray={circumference + ' ' + circumference}
-                        style={{ strokeDashoffset }}
-                        strokeLinecap="round"
-                        fill="transparent"
-                        r={normalizedRadius}
-                        cx={radius}
-                        cy={radius}
-                    />
-                </svg>
-                <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-center pointer-events-none">
-                    <div className="text-6xl font-light tracking-tight text-zen-text select-none">
-                        {formatTime(timeLeft)}
+                <div className="relative mb-8 group">
+                    <svg
+                        height={radius * 2}
+                        width={radius * 2}
+                        className="rotate-[-90deg] transform transition-all duration-300"
+                    >
+                        <circle
+                            className="stroke-zen-bg"
+                            strokeWidth={stroke}
+                            fill="transparent"
+                            r={normalizedRadius}
+                            cx={radius}
+                            cy={radius}
+                        />
+                        <circle
+                            className={`${getModeColor()} transition-all duration-500 ease-in-out`}
+                            strokeWidth={stroke}
+                            strokeDasharray={circumference + ' ' + circumference}
+                            style={{ strokeDashoffset }}
+                            strokeLinecap="round"
+                            fill="transparent"
+                            r={normalizedRadius}
+                            cx={radius}
+                            cy={radius}
+                        />
+                    </svg>
+                    <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-center pointer-events-none">
+                        <div className="text-6xl font-light tracking-tight text-zen-text select-none">
+                            {formatTime(timeLeft)}
+                        </div>
+                        <div className="text-zen-muted text-sm mt-2 uppercase tracking-widest font-medium">
+                            {isActive ? 'Running' : 'Paused'}
+                        </div>
                     </div>
-                    <div className="text-zen-muted text-sm mt-2 uppercase tracking-widest font-medium">
-                        {isActive ? 'Running' : 'Paused'}
-                    </div>
+                </div>
+
+                <div className="flex gap-4">
+                    <button
+                        onClick={toggleTimer}
+                        className={`flex items-center justify-center w-16 h-16 rounded-2xl transition-all ${isActive
+                            ? 'bg-zen-bg text-zen-text hover:bg-zen-card'
+                            : 'bg-zen-text text-zen-bg hover:bg-white hover:scale-105'
+                            } shadow-lg`}
+                    >
+                        {isActive ? <Pause size={28} fill="currentColor" /> : <Play size={28} fill="currentColor" className="ml-1" />}
+                    </button>
+                    <button
+                        onClick={resetTimer}
+                        className="flex items-center justify-center w-16 h-16 rounded-2xl bg-zen-bg text-zen-muted hover:text-zen-text hover:bg-zen-card transition-all shadow-lg"
+                    >
+                        <RotateCcw size={24} />
+                    </button>
                 </div>
             </div>
 
-            <div className="flex gap-4">
+            {/* Settings Overlay */}
+            <div className={`absolute inset-0 bg-zen-card/95 backdrop-blur-sm z-20 p-8 flex flex-col transition-all duration-300 ease-out ${showSettings ? 'translate-y-0 opacity-100' : 'translate-y-full opacity-0 pointer-events-none'
+                }`}>
+                <div className="flex justify-between items-center mb-6">
+                    <h3 className="text-lg font-medium text-zen-text">Customize Timer</h3>
+                    <button onClick={() => setShowSettings(false)} className="text-zen-muted hover:text-zen-text p-2 hover:bg-zen-bg/50 rounded-lg transition-colors">
+                        <X size={20} />
+                    </button>
+                </div>
+
+                <div className="flex-1 space-y-5 overflow-y-auto">
+                    {/* Focus Duration */}
+                    <div className="space-y-2">
+                        <label className="text-xs font-medium text-zen-muted uppercase tracking-wider flex items-center gap-2">
+                            <Brain size={14} className="text-zen-primary" /> Focus Duration
+                        </label>
+                        <div className="relative">
+                            <input
+                                type="number"
+                                value={localConfig.focus}
+                                onChange={(e) => setLocalConfig(prev => ({ ...prev, focus: parseInt(e.target.value) || 0 }))}
+                                className="w-full bg-zen-bg rounded-xl py-3 px-4 text-zen-text font-medium focus:outline-none focus:ring-2 focus:ring-zen-primary/50 transition-all border border-transparent focus:border-zen-primary/30"
+                            />
+                            <span className="absolute right-4 top-1/2 -translate-y-1/2 text-sm text-zen-muted">min</span>
+                        </div>
+                    </div>
+
+                    {/* Short Break Duration */}
+                    <div className="space-y-2">
+                        <label className="text-xs font-medium text-zen-muted uppercase tracking-wider flex items-center gap-2">
+                            <Coffee size={14} className="text-zen-secondary" /> Short Break
+                        </label>
+                        <div className="relative">
+                            <input
+                                type="number"
+                                value={localConfig.shortBreak}
+                                onChange={(e) => setLocalConfig(prev => ({ ...prev, shortBreak: parseInt(e.target.value) || 0 }))}
+                                className="w-full bg-zen-bg rounded-xl py-3 px-4 text-zen-text font-medium focus:outline-none focus:ring-2 focus:ring-zen-secondary/50 transition-all border border-transparent focus:border-zen-secondary/30"
+                            />
+                            <span className="absolute right-4 top-1/2 -translate-y-1/2 text-sm text-zen-muted">min</span>
+                        </div>
+                    </div>
+
+                    {/* Long Break Duration */}
+                    <div className="space-y-2">
+                        <label className="text-xs font-medium text-zen-muted uppercase tracking-wider flex items-center gap-2">
+                            <Zap size={14} className="text-zen-accent" /> Long Break
+                        </label>
+                        <div className="relative">
+                            <input
+                                type="number"
+                                value={localConfig.longBreak}
+                                onChange={(e) => setLocalConfig(prev => ({ ...prev, longBreak: parseInt(e.target.value) || 0 }))}
+                                className="w-full bg-zen-bg rounded-xl py-3 px-4 text-zen-text font-medium focus:outline-none focus:ring-2 focus:ring-zen-accent/50 transition-all border border-transparent focus:border-zen-accent/30"
+                            />
+                            <span className="absolute right-4 top-1/2 -translate-y-1/2 text-sm text-zen-muted">min</span>
+                        </div>
+                    </div>
+                </div>
+
                 <button
-                    onClick={toggleTimer}
-                    className={`flex items-center justify-center w-16 h-16 rounded-2xl transition-all ${isActive
-                            ? 'bg-zen-bg text-zen-text hover:bg-zen-card'
-                            : 'bg-zen-text text-zen-bg hover:bg-white hover:scale-105'
-                        } shadow-lg`}
+                    onClick={handleSaveSettings}
+                    className="mt-4 w-full bg-gradient-to-r from-zen-primary to-zen-secondary text-white font-medium py-3 rounded-xl hover:opacity-90 active:scale-[0.98] transition-all flex items-center justify-center gap-2 shadow-lg shadow-zen-primary/20"
                 >
-                    {isActive ? <Pause size={28} fill="currentColor" /> : <Play size={28} fill="currentColor" className="ml-1" />}
-                </button>
-                <button
-                    onClick={resetTimer}
-                    className="flex items-center justify-center w-16 h-16 rounded-2xl bg-zen-bg text-zen-muted hover:text-zen-text hover:bg-zen-card transition-all shadow-lg"
-                >
-                    <RotateCcw size={24} />
+                    <Save size={18} /> Save Changes
                 </button>
             </div>
         </div>
