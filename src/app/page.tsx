@@ -18,7 +18,7 @@ export default function Home() {
         <div className="w-8 h-8 rounded-full bg-gradient-to-tr from-zen-primary to-zen-secondary animate-pulse-slow"></div>
       </header>
 
-      <main className="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-6">
+      <main className="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-10">
 
         {/* Left Column: Timer (Centers on Mobile) */}
         <section className="lg:col-span-5 flex flex-col gap-6">
