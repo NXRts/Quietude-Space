@@ -158,7 +158,7 @@ export default function Timer() {
                                 type="number"
                                 value={localConfig.focus}
                                 onChange={(e) => setLocalConfig(prev => ({ ...prev, focus: parseInt(e.target.value) || 0 }))}
-                                className="w-full bg-zen-bg rounded-xl py-3 px-4 text-zen-text font-medium focus:outline-none focus:ring-2 focus:ring-zen-primary/50 transition-all border border-transparent focus:border-zen-primary/30"
+                                className="w-full bg-zen-bg rounded-xl py-3 px-4 text-zen-text font-medium focus:outline-none focus:ring-2 focus:ring-zen-primary/50 transition-all border border-transparent focus:border-zen-primary/30 appearance-none [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none"
                             />
                             <span className="absolute right-4 top-1/2 -translate-y-1/2 text-sm text-zen-muted">min</span>
                         </div>
@@ -174,7 +174,7 @@ export default function Timer() {
                                 type="number"
                                 value={localConfig.shortBreak}
                                 onChange={(e) => setLocalConfig(prev => ({ ...prev, shortBreak: parseInt(e.target.value) || 0 }))}
-                                className="w-full bg-zen-bg rounded-xl py-3 px-4 text-zen-text font-medium focus:outline-none focus:ring-2 focus:ring-zen-secondary/50 transition-all border border-transparent focus:border-zen-secondary/30"
+                                className="w-full bg-zen-bg rounded-xl py-3 px-4 text-zen-text font-medium focus:outline-none focus:ring-2 focus:ring-zen-secondary/50 transition-all border border-transparent focus:border-zen-secondary/30 appearance-none [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none"
                             />
                             <span className="absolute right-4 top-1/2 -translate-y-1/2 text-sm text-zen-muted">min</span>
                         </div>
@@ -190,7 +190,7 @@ export default function Timer() {
                                 type="number"
                                 value={localConfig.longBreak}
                                 onChange={(e) => setLocalConfig(prev => ({ ...prev, longBreak: parseInt(e.target.value) || 0 }))}
-                                className="w-full bg-zen-bg rounded-xl py-3 px-4 text-zen-text font-medium focus:outline-none focus:ring-2 focus:ring-zen-accent/50 transition-all border border-transparent focus:border-zen-accent/30"
+                                className="w-full bg-zen-bg rounded-xl py-3 px-4 text-zen-text font-medium focus:outline-none focus:ring-2 focus:ring-zen-accent/50 transition-all border border-transparent focus:border-zen-accent/30 appearance-none [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none"
                             />
                             <span className="absolute right-4 top-1/2 -translate-y-1/2 text-sm text-zen-muted">min</span>
                         </div>
