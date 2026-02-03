@@ -2,6 +2,7 @@
 import Timer from '@/components/Timer';
 import TaskList from '@/components/TaskList';
 import SoundMixer from '@/components/SoundMixer';
+import PrayerTimes from '@/components/PrayerTimes';
 
 export default function Home() {
   return (
@@ -18,21 +19,28 @@ export default function Home() {
         <div className="w-8 h-8 rounded-full bg-gradient-to-tr from-zen-primary to-zen-secondary animate-pulse-slow"></div>
       </header>
 
-      <main className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 flex-1 w-full items-start">
+      <main className="max-w-[1600px] mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 flex-1 w-full items-start">
 
         {/* Column 1: Timer */}
-        <section className="flex flex-col h-full">
+        <section className="flex flex-col">
           <Timer />
         </section>
 
         {/* Column 2: Tasks */}
-        <section className="flex flex-col h-full min-h-[500px]">
+        <section className="flex flex-col min-h-[300px]">
           <TaskList />
         </section>
 
         {/* Column 3: Sounds */}
-        <section className="flex flex-col h-full">
+        <section className="flex flex-col">
           <SoundMixer />
+        </section>
+
+        {/* Column 4: Prayer */}
+        <section className="flex flex-col">
+          <div className="flex-1 min-h-[300px]">
+            <PrayerTimes />
+          </div>
         </section>
 
       </main>

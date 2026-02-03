@@ -32,6 +32,7 @@ const AudioController = ({
             audio.pause();
             audioRef.current = null;
         };
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [sound.src]); // Re-init if src changes (unlikely)
 
     useEffect(() => {
@@ -83,7 +84,7 @@ export default function SoundMixer() {
     };
 
     return (
-        <div className="bg-zen-card p-6 rounded-3xl shadow-lg border border-zen-accent/10 h-full min-h-[500px]">
+        <div className="bg-zen-card p-6 rounded-3xl shadow-lg border border-zen-accent/10 min-h-[300px]">
             <h2 className="text-xl font-medium mb-4 text-zen-text flex items-center gap-2">
                 <span className="w-1.5 h-6 bg-zen-secondary rounded-full"></span>
                 Ambient Sounds
