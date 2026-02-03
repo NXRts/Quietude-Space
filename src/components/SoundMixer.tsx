@@ -83,7 +83,7 @@ export default function SoundMixer() {
     };
 
     return (
-        <div className="bg-zen-card p-6 rounded-3xl shadow-lg border border-zen-accent/10 h-full">
+        <div className="bg-zen-card p-6 rounded-3xl shadow-lg border border-zen-accent/10 h-full min-h-[500px]">
             <h2 className="text-xl font-medium mb-4 text-zen-text flex items-center gap-2">
                 <span className="w-1.5 h-6 bg-zen-secondary rounded-full"></span>
                 Ambient Sounds
@@ -106,8 +106,8 @@ export default function SoundMixer() {
                                 <button
                                     onClick={() => toggleSound(sound.id)}
                                     className={`p-2 rounded-xl transition-all ${state.isPlaying
-                                            ? 'bg-zen-secondary text-white'
-                                            : 'bg-zen-bg text-zen-muted hover:text-zen-text hover:bg-zen-card'
+                                        ? 'bg-zen-secondary text-white'
+                                        : 'bg-zen-bg text-zen-muted hover:text-zen-text hover:bg-zen-card'
                                         }`}
                                 >
                                     {state.isPlaying ? <Pause size={16} fill="currentColor" /> : <Play size={16} fill="currentColor" className="ml-0.5" />}

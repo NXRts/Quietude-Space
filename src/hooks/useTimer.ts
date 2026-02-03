@@ -19,7 +19,8 @@ export function useTimer() {
         if (!isActive) {
             setTimeLeft(config[mode]);
         }
-    }, [config, mode, isActive]);
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [config, mode]);
 
     const switchMode = useCallback((newMode: TimerMode) => {
         setMode(newMode);

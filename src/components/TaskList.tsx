@@ -35,7 +35,7 @@ export default function TaskList() {
     };
 
     return (
-        <div className="bg-zen-card p-6 rounded-3xl shadow-lg border border-zen-accent/10 h-full flex flex-col">
+        <div className="bg-zen-card p-6 rounded-3xl shadow-lg border border-zen-accent/10 h-full min-h-[500px] flex flex-col">
             <h2 className="text-xl font-medium mb-4 text-zen-text flex items-center gap-2">
                 <span className="w-1.5 h-6 bg-zen-primary rounded-full"></span>
                 Tasks
