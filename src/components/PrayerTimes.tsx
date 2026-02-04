@@ -79,7 +79,7 @@ export default function PrayerTimes() {
             {/* Header */}
             <div className="flex items-center justify-between mb-8">
                 <h2 className="text-xl font-medium text-zen-text flex items-center gap-3">
-                    <span className="w-1.5 h-6 rounded-full bg-indigo-500"></span>
+                    <span className="w-1.5 h-6 rounded-full bg-amber-500 shadow-[0_0_10px_rgba(245,158,11,0.4)]"></span>
                     Prayer Times
                 </h2>
                 <div className="text-[10px] text-zen-muted text-right uppercase tracking-wider font-medium">
@@ -95,7 +95,7 @@ export default function PrayerTimes() {
                         value={searchCity}
                         onChange={(e) => setSearchCity(e.target.value)}
                         placeholder="Jakarta"
-                        className="w-full bg-zen-accent/30 rounded-xl py-2.5 pl-10 pr-4 text-zen-text text-sm focus:outline-none focus:ring-1 focus:ring-zen-primary transition-all border border-transparent"
+                        className="w-full bg-zen-accent/30 rounded-xl py-2.5 pl-10 pr-4 text-zen-text text-sm focus:outline-none focus:ring-1 focus:ring-amber-500/50 transition-all border border-transparent"
                     />
                     <MapPin size={15} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-zen-muted" />
                 </div>
@@ -105,11 +105,11 @@ export default function PrayerTimes() {
                         value={country}
                         onChange={(e) => setCountry(e.target.value)}
                         placeholder="Indonesia"
-                        className="w-full bg-zen-accent/30 rounded-xl py-2.5 pl-4 pr-10 text-zen-text text-sm focus:outline-none focus:ring-1 focus:ring-zen-primary transition-all border border-transparent"
+                        className="w-full bg-zen-accent/30 rounded-xl py-2.5 pl-4 pr-10 text-zen-text text-sm focus:outline-none focus:ring-1 focus:ring-amber-500/50 transition-all border border-transparent"
                     />
                     <button
                         type="submit"
-                        className="absolute right-2 p-1.5 text-zen-muted hover:text-zen-primary transition-colors"
+                        className="absolute right-2 p-1.5 text-zen-muted hover:text-amber-500 transition-colors"
                     >
                         {loading ? <Loader2 size={18} className="animate-spin" /> : <Search size={18} />}
                     </button>
@@ -124,19 +124,19 @@ export default function PrayerTimes() {
             )}
 
             {/* Prayer List */}
-            <div className="flex-1 space-y-2.5 overflow-y-auto pr-1">
+            <div className="flex-1 overflow-y-auto pr-2 space-y-2.5 custom-scrollbar">
                 {prayers.map((prayer) => (
                     <div
                         key={prayer.name}
                         className="flex items-center justify-between p-3.5 rounded-xl bg-zen-accent/20 border border-transparent hover:border-white/5 transition-all group"
                     >
                         <div className="flex items-center gap-3">
-                            <div className="text-indigo-400">
+                            <div className="text-amber-500/80">
                                 {prayer.icon}
                             </div>
                             <span className="text-zen-muted group-hover:text-white transition-colors text-sm font-medium">{prayer.name}</span>
                         </div>
-                        <span className="text-white font-medium text-base">
+                        <span className="text-amber-500 font-medium text-base">
                             {prayerData?.timings[prayer.name] || '--:--'}
                         </span>
                     </div>

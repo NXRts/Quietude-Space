@@ -1,13 +1,17 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { CloudRain, Flame, Waves, Wind, Volume2, VolumeX, Play, Pause } from 'lucide-react';
+import { CloudRain, Flame, Waves, Wind, Play, Pause, Coffee, Trees, Music, Bird } from 'lucide-react';
 import { Sound } from '@/types';
 
-// Using local public sound files for reliability
+// Using local public sound files and fallback public URLs
 const AVAILABLE_SOUNDS: Sound[] = [
     { id: 'rain', name: 'Rain', src: '/sounds/rain.ogg', icon: <CloudRain size={20} /> },
     { id: 'fire', name: 'Fireplace', src: '/sounds/fire.ogg', icon: <Flame size={20} /> },
     { id: 'stream', name: 'River', src: '/sounds/stream.ogg', icon: <Waves size={20} /> },
     { id: 'wind', name: 'Wind', src: '/sounds/wind.ogg', icon: <Wind size={20} /> },
+    { id: 'cafe', name: 'Cafe Ambience', src: 'https://actions.google.com/sounds/v1/ambiences/coffee_shop.ogg', icon: <Coffee size={20} /> },
+    { id: 'forest', name: 'Forest', src: 'https://actions.google.com/sounds/v1/ambiences/forest_ambience.ogg', icon: <Trees size={20} /> },
+    { id: 'white-noise', name: 'White Noise', src: 'https://actions.google.com/sounds/v1/ambiences/white_noise.ogg', icon: <Music size={20} /> },
+    { id: 'birds', name: 'Morning Birds', src: 'https://actions.google.com/sounds/v1/animals/birds_singing.ogg', icon: <Bird size={20} /> },
 ];
 
 const AudioController = ({
@@ -86,11 +90,11 @@ export default function SoundMixer() {
     return (
         <div className="bg-zen-card p-6 rounded-3xl shadow-lg border border-white/5 min-h-[300px] flex flex-col h-full">
             <h2 className="text-xl font-medium mb-6 text-zen-text flex items-center gap-3">
-                <span className="w-1.5 h-6 bg-indigo-400 rounded-full"></span>
+                <span className="w-1.5 h-6 bg-purple-500 rounded-full shadow-[0_0_10px_rgba(168,85,247,0.4)]"></span>
                 Ambient Sounds
             </h2>
 
-            <div className="space-y-3 flex-1">
+            <div className="flex-1 overflow-y-auto pr-2 space-y-3 custom-scrollbar">
                 {AVAILABLE_SOUNDS.map((sound) => {
                     const state = activeSounds[sound.id] || { isPlaying: false, volume: 0.5 };
 
@@ -107,19 +111,19 @@ export default function SoundMixer() {
                                 <button
                                     onClick={() => toggleSound(sound.id)}
                                     className={`p-2 rounded-xl transition-all active:scale-95 ${state.isPlaying
-                                        ? 'bg-indigo-500 text-white'
+                                        ? 'bg-purple-600 text-white shadow-[0_0_12px_rgba(147,51,234,0.3)]'
                                         : 'bg-zen-card text-zen-muted'
                                         }`}
                                 >
-                                    {state.isPlaying ? <Pause size={18} fill="currentColor" /> : <Play size={18} fill="currentColor" className="ml-0.5" />}
+                                    {state.isPlaying ? <Pause size={18} strokeWidth={2.5} /> : <Play size={18} strokeWidth={2.5} className="ml-0.5" />}
                                 </button>
 
                                 <div className="flex-1 flex flex-col gap-2">
                                     <div className="flex items-center gap-3">
-                                        <div className={`transition-colors ${state.isPlaying ? 'text-indigo-400' : 'text-zen-muted'}`}>
+                                        <div className={`transition-colors ${state.isPlaying ? 'text-purple-400' : 'text-zen-muted'}`}>
                                             {sound.icon}
                                         </div>
-                                        <span className={`text-sm font-medium ${state.isPlaying ? 'text-white' : 'text-zen-muted'}`}>
+                                        <span className={`text-sm font-medium transition-colors ${state.isPlaying ? 'text-white' : 'text-zen-muted'}`}>
                                             {sound.name}
                                         </span>
                                     </div>
@@ -135,7 +139,7 @@ export default function SoundMixer() {
                                             className="w-full h-1 bg-zen-bg rounded-full appearance-none cursor-pointer [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:w-2.5 [&::-webkit-slider-thumb]:h-2.5 [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:bg-white transition-opacity"
                                             disabled={!state.isPlaying && !activeSounds[sound.id]}
                                             style={{
-                                                background: `linear-gradient(to right, #818cf8 ${state.volume * 100}%, #1a1c23 ${state.volume * 100}%)`
+                                                background: `linear-gradient(to right, #a855f7 ${state.volume * 100}%, #1a1c23 ${state.volume * 100}%)`
                                             }}
                                         />
                                     </div>

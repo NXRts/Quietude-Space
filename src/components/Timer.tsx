@@ -54,7 +54,7 @@ export default function Timer() {
             {/* Header */}
             <div className="w-full flex justify-between items-center mb-10">
                 <h2 className="text-xl font-medium text-zen-text flex items-center gap-3">
-                    <span className="w-1.5 h-6 rounded-full bg-emerald-400"></span>
+                    <span className="w-1.5 h-6 rounded-full bg-emerald-400 shadow-[0_0_10px_rgba(52,211,153,0.4)]"></span>
                     Timer
                 </h2>
                 <button
@@ -66,72 +66,74 @@ export default function Timer() {
             </div>
 
             {/* Timer Display */}
-            <div className={`flex flex-col items-center w-full transition-all duration-300 ${showSettings ? 'scale-95 opacity-50 blur-sm' : 'scale-100 opacity-100'}`}>
-                <div className="flex gap-1.5 mb-10 bg-zen-bg/40 p-1.5 rounded-full border border-white/5">
-                    <button onClick={() => switchMode('focus')} className={getButtonClass('focus')}>
-                        <Brain size={15} /> Focus
-                    </button>
-                    <button onClick={() => switchMode('shortBreak')} className={getButtonClass('shortBreak')}>
-                        <Coffee size={15} /> Short
-                    </button>
-                    <button onClick={() => switchMode('longBreak')} className={getButtonClass('longBreak')}>
-                        <Zap size={15} /> Long
-                    </button>
-                </div>
+            <div className={`flex-1 overflow-y-auto w-full custom-scrollbar transition-all duration-300 ${showSettings ? 'scale-95 opacity-50 blur-sm' : 'scale-100 opacity-100'}`}>
+                <div className="flex flex-col items-center py-4">
+                    <div className="flex gap-1.5 mb-10 bg-zen-bg/40 p-1.5 rounded-full border border-white/5">
+                        <button onClick={() => switchMode('focus')} className={getButtonClass('focus')}>
+                            <Brain size={15} /> Focus
+                        </button>
+                        <button onClick={() => switchMode('shortBreak')} className={getButtonClass('shortBreak')}>
+                            <Coffee size={15} /> Short
+                        </button>
+                        <button onClick={() => switchMode('longBreak')} className={getButtonClass('longBreak')}>
+                            <Zap size={15} /> Long
+                        </button>
+                    </div>
 
-                <div className="relative mb-10 group">
-                    <div className="absolute inset-0 rounded-full bg-zen-bg/20 blur-xl opacity-0 group-hover:opacity-100 transition-opacity"></div>
-                    <svg
-                        height={radius * 2}
-                        width={radius * 2}
-                        className="rotate-[-90deg] transform transition-all duration-300 relative z-10"
-                    >
-                        <circle
-                            className="stroke-zen-accent/20"
-                            strokeWidth={stroke}
-                            fill="transparent"
-                            r={normalizedRadius}
-                            cx={radius}
-                            cy={radius}
-                        />
-                        <circle
-                            className={`${getModeColor()} transition-all duration-500 ease-in-out`}
-                            strokeWidth={stroke}
-                            strokeDasharray={circumference + ' ' + circumference}
-                            style={{ strokeDashoffset }}
-                            strokeLinecap="round"
-                            fill="transparent"
-                            r={normalizedRadius}
-                            cx={radius}
-                            cy={radius}
-                        />
-                    </svg>
-                    <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-center pointer-events-none z-20">
-                        <div className="text-7xl font-light tracking-tight text-white select-none">
-                            {formatTime(timeLeft)}
-                        </div>
-                        <div className="text-zen-muted text-xs mt-3 uppercase tracking-[0.2em] font-medium">
-                            {isActive ? 'Active' : 'Paused'}
+                    <div className="relative mb-10 group">
+                        <div className="absolute inset-0 rounded-full bg-zen-bg/20 blur-xl opacity-0 group-hover:opacity-100 transition-opacity"></div>
+                        <svg
+                            height={radius * 2}
+                            width={radius * 2}
+                            className="rotate-[-90deg] transform transition-all duration-300 relative z-10"
+                        >
+                            <circle
+                                className="stroke-zen-accent/20"
+                                strokeWidth={stroke}
+                                fill="transparent"
+                                r={normalizedRadius}
+                                cx={radius}
+                                cy={radius}
+                            />
+                            <circle
+                                className={`${getModeColor()} transition-all duration-500 ease-in-out`}
+                                strokeWidth={stroke}
+                                strokeDasharray={circumference + ' ' + circumference}
+                                style={{ strokeDashoffset }}
+                                strokeLinecap="round"
+                                fill="transparent"
+                                r={normalizedRadius}
+                                cx={radius}
+                                cy={radius}
+                            />
+                        </svg>
+                        <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-center pointer-events-none z-20">
+                            <div className="text-7xl font-light tracking-tight text-white select-none">
+                                {formatTime(timeLeft)}
+                            </div>
+                            <div className="text-zen-muted text-xs mt-3 uppercase tracking-[0.2em] font-medium">
+                                {isActive ? 'Active' : 'Paused'}
+                            </div>
                         </div>
                     </div>
-                </div>
 
-                <div className="flex gap-5">
-                    <button
-                        onClick={toggleTimer}
-                        className={`flex items-center justify-center w-16 h-16 rounded-2xl transition-all shadow-xl ${isActive
-                            ? 'bg-zen-accent text-zen-text hover:bg-zen-accent/80'
-                            : 'bg-white text-zen-bg hover:scale-105 active:scale-95'
-                            }`}
-                    >
-                        {isActive ? <Pause size={28} fill="currentColor" /> : <Play size={28} fill="currentColor" className="ml-1" />}
-                    </button>
-                    <button
-                        onClick={resetTimer}
-                        className="flex items-center justify-center w-16 h-16 rounded-2xl bg-zen-accent/40 text-zen-muted hover:text-zen-text hover:bg-zen-accent/60 transition-all active:scale-95"
-                    >
-                        <RotateCcw size={24} />
-                    </button>
+                    <div className="flex gap-5">
+                        <button
+                            onClick={toggleTimer}
+                            className={`flex items-center justify-center w-16 h-16 rounded-2xl transition-all shadow-xl ${isActive
+                                ? 'bg-zen-accent text-zen-text hover:bg-zen-accent/80'
+                                : 'bg-white text-zen-bg hover:scale-105 active:scale-95'
+                                }`}
+                        >
+                            {isActive ? <Pause size={28} fill="currentColor" /> : <Play size={28} fill="currentColor" className="ml-1" />}
+                        </button>
+                        <button
+                            onClick={resetTimer}
+                            className="flex items-center justify-center w-16 h-16 rounded-2xl bg-zen-accent/40 text-zen-muted hover:text-zen-text hover:bg-zen-accent/60 transition-all active:scale-95"
+                        >
+                            <RotateCcw size={24} />
+                        </button>
+                    </div>
                 </div>
             </div>
 

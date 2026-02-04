@@ -37,7 +37,7 @@ export default function TaskList() {
     return (
         <div className="bg-zen-card p-6 rounded-3xl shadow-lg border border-white/5 min-h-[300px] flex flex-col h-full">
             <h2 className="text-xl font-medium mb-6 text-zen-text flex items-center gap-3">
-                <span className="w-1.5 h-6 bg-sky-400 rounded-full"></span>
+                <span className="w-1.5 h-6 bg-sky-400 rounded-full shadow-[0_0_10px_rgba(56,189,248,0.4)]"></span>
                 Tasks
             </h2>
 
@@ -57,7 +57,7 @@ export default function TaskList() {
                 </button>
             </form>
 
-            <div className="flex-1 overflow-y-auto pr-2 space-y-2">
+            <div className="flex-1 overflow-y-auto pr-2 space-y-2 custom-scrollbar">
                 {tasks.length === 0 ? (
                     <div className="text-center text-zen-muted py-8 text-sm">
                         No tasks yet. Stay focused!
