@@ -50,46 +50,44 @@ export default function Timer() {
     };
 
     return (
-        <div className="bg-zen-card p-8 rounded-3xl shadow-lg border border-zen-accent/10 flex flex-col items-center relative overflow-hidden h-full min-h-[500px] w-full">
-            {/* Background decoration */}
-            <div className={`absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-current to-transparent opacity-20 ${getModeColor()}`} />
-
+        <div className="bg-zen-card p-6 rounded-3xl shadow-lg border border-white/5 flex flex-col items-center relative overflow-hidden min-h-[300px] w-full h-full">
             {/* Header */}
-            <div className="w-full flex justify-between items-start mb-6">
-                <h2 className="text-xl font-medium text-zen-text flex items-center gap-2">
-                    <span className="w-1.5 h-6 rounded-full bg-emerald-500"></span>
+            <div className="w-full flex justify-between items-center mb-10">
+                <h2 className="text-xl font-medium text-zen-text flex items-center gap-3">
+                    <span className="w-1.5 h-6 rounded-full bg-emerald-400"></span>
                     Timer
                 </h2>
                 <button
                     onClick={() => setShowSettings(true)}
-                    className="text-zen-muted hover:text-zen-text transition-colors hover:bg-zen-bg/50 p-2 rounded-full -mr-2 -mt-2"
+                    className="text-zen-muted hover:text-zen-text transition-colors p-1.5 rounded-full"
                 >
                     <Settings size={20} />
                 </button>
             </div>
 
             {/* Timer Display */}
-            <div className={`flex flex-col items-center w-full transition-all duration-300 ${showSettings ? 'scale-90 opacity-50 blur-sm' : 'scale-100 opacity-100'}`}>
-                <div className="flex gap-2 mb-8 bg-zen-bg/50 p-1.5 rounded-full">
+            <div className={`flex flex-col items-center w-full transition-all duration-300 ${showSettings ? 'scale-95 opacity-50 blur-sm' : 'scale-100 opacity-100'}`}>
+                <div className="flex gap-1.5 mb-10 bg-zen-bg/40 p-1.5 rounded-full border border-white/5">
                     <button onClick={() => switchMode('focus')} className={getButtonClass('focus')}>
-                        <Brain size={16} /> Focus
+                        <Brain size={15} /> Focus
                     </button>
                     <button onClick={() => switchMode('shortBreak')} className={getButtonClass('shortBreak')}>
-                        <Coffee size={16} /> Short
+                        <Coffee size={15} /> Short
                     </button>
                     <button onClick={() => switchMode('longBreak')} className={getButtonClass('longBreak')}>
-                        <Zap size={16} /> Long
+                        <Zap size={15} /> Long
                     </button>
                 </div>
 
-                <div className="relative mb-6 group">
+                <div className="relative mb-10 group">
+                    <div className="absolute inset-0 rounded-full bg-zen-bg/20 blur-xl opacity-0 group-hover:opacity-100 transition-opacity"></div>
                     <svg
                         height={radius * 2}
                         width={radius * 2}
-                        className="rotate-[-90deg] transform transition-all duration-300"
+                        className="rotate-[-90deg] transform transition-all duration-300 relative z-10"
                     >
                         <circle
-                            className="stroke-zen-bg"
+                            className="stroke-zen-accent/20"
                             strokeWidth={stroke}
                             fill="transparent"
                             r={normalizedRadius}
@@ -108,29 +106,29 @@ export default function Timer() {
                             cy={radius}
                         />
                     </svg>
-                    <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-center pointer-events-none">
-                        <div className="text-6xl font-light tracking-tight text-zen-text select-none">
+                    <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-center pointer-events-none z-20">
+                        <div className="text-7xl font-light tracking-tight text-white select-none">
                             {formatTime(timeLeft)}
                         </div>
-                        <div className="text-zen-muted text-sm mt-2 uppercase tracking-widest font-medium">
-                            {isActive ? 'Running' : 'Paused'}
+                        <div className="text-zen-muted text-xs mt-3 uppercase tracking-[0.2em] font-medium">
+                            {isActive ? 'Active' : 'Paused'}
                         </div>
                     </div>
                 </div>
 
-                <div className="flex gap-4">
+                <div className="flex gap-5">
                     <button
                         onClick={toggleTimer}
-                        className={`flex items-center justify-center w-16 h-16 rounded-2xl transition-all ${isActive
-                            ? 'bg-zen-bg text-zen-text hover:bg-zen-card'
-                            : 'bg-zen-text text-zen-bg hover:bg-white hover:scale-105'
-                            } shadow-lg`}
+                        className={`flex items-center justify-center w-16 h-16 rounded-2xl transition-all shadow-xl ${isActive
+                            ? 'bg-zen-accent text-zen-text hover:bg-zen-accent/80'
+                            : 'bg-white text-zen-bg hover:scale-105 active:scale-95'
+                            }`}
                     >
                         {isActive ? <Pause size={28} fill="currentColor" /> : <Play size={28} fill="currentColor" className="ml-1" />}
                     </button>
                     <button
                         onClick={resetTimer}
-                        className="flex items-center justify-center w-16 h-16 rounded-2xl bg-zen-bg text-zen-muted hover:text-zen-text hover:bg-zen-card transition-all shadow-lg"
+                        className="flex items-center justify-center w-16 h-16 rounded-2xl bg-zen-accent/40 text-zen-muted hover:text-zen-text hover:bg-zen-accent/60 transition-all active:scale-95"
                     >
                         <RotateCcw size={24} />
                     </button>
@@ -158,7 +156,7 @@ export default function Timer() {
                                 type="number"
                                 value={localConfig.focus}
                                 onChange={(e) => setLocalConfig(prev => ({ ...prev, focus: parseInt(e.target.value) || 0 }))}
-                                className="w-full bg-zen-bg rounded-xl py-3 px-4 text-zen-text font-medium focus:outline-none focus:ring-2 focus:ring-zen-primary/50 transition-all border border-transparent focus:border-zen-primary/30 appearance-none [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none text-center"
+                                className="w-full bg-zen-bg rounded-xl py-3 px-4 text-zen-text font-medium focus:outline-none focus:ring-2 focus:ring-zen-primary/50 transition-all border border-transparent focus:border-zen-primary/30 appearance-none [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none"
                             />
                             <span className="absolute right-4 top-1/2 -translate-y-1/2 text-sm text-zen-muted">min</span>
                         </div>
@@ -174,7 +172,7 @@ export default function Timer() {
                                 type="number"
                                 value={localConfig.shortBreak}
                                 onChange={(e) => setLocalConfig(prev => ({ ...prev, shortBreak: parseInt(e.target.value) || 0 }))}
-                                className="w-full bg-zen-bg rounded-xl py-3 px-4 text-zen-text font-medium focus:outline-none focus:ring-2 focus:ring-zen-secondary/50 transition-all border border-transparent focus:border-zen-secondary/30 appearance-none [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none text-center"
+                                className="w-full bg-zen-bg rounded-xl py-3 px-4 text-zen-text font-medium focus:outline-none focus:ring-2 focus:ring-zen-secondary/50 transition-all border border-transparent focus:border-zen-secondary/30 appearance-none [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none"
                             />
                             <span className="absolute right-4 top-1/2 -translate-y-1/2 text-sm text-zen-muted">min</span>
                         </div>
@@ -190,7 +188,7 @@ export default function Timer() {
                                 type="number"
                                 value={localConfig.longBreak}
                                 onChange={(e) => setLocalConfig(prev => ({ ...prev, longBreak: parseInt(e.target.value) || 0 }))}
-                                className="w-full bg-zen-bg rounded-xl py-3 px-4 text-zen-text font-medium focus:outline-none focus:ring-2 focus:ring-zen-accent/50 transition-all border border-transparent focus:border-zen-accent/30 appearance-none [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none text-center"
+                                className="w-full bg-zen-bg rounded-xl py-3 px-4 text-zen-text font-medium focus:outline-none focus:ring-2 focus:ring-zen-accent/50 transition-all border border-transparent focus:border-zen-accent/30 appearance-none [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none"
                             />
                             <span className="absolute right-4 top-1/2 -translate-y-1/2 text-sm text-zen-muted">min</span>
                         </div>

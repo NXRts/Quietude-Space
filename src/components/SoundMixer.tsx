@@ -32,6 +32,7 @@ const AudioController = ({
             audio.pause();
             audioRef.current = null;
         };
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [sound.src]); // Re-init if src changes (unlikely)
 
     useEffect(() => {
@@ -83,18 +84,18 @@ export default function SoundMixer() {
     };
 
     return (
-        <div className="bg-zen-card p-6 rounded-3xl shadow-lg border border-zen-accent/10 h-full min-h-[500px]">
-            <h2 className="text-xl font-medium mb-4 text-zen-text flex items-center gap-2">
-                <span className="w-1.5 h-6 bg-zen-secondary rounded-full"></span>
+        <div className="bg-zen-card p-6 rounded-3xl shadow-lg border border-white/5 min-h-[300px] flex flex-col h-full">
+            <h2 className="text-xl font-medium mb-6 text-zen-text flex items-center gap-3">
+                <span className="w-1.5 h-6 bg-indigo-400 rounded-full"></span>
                 Ambient Sounds
             </h2>
 
-            <div className="space-y-4">
+            <div className="space-y-3 flex-1">
                 {AVAILABLE_SOUNDS.map((sound) => {
                     const state = activeSounds[sound.id] || { isPlaying: false, volume: 0.5 };
 
                     return (
-                        <div key={sound.id} className="group bg-zen-bg/30 p-3 rounded-2xl hover:bg-zen-bg/50 transition-all">
+                        <div key={sound.id} className="group bg-zen-accent/30 p-4 rounded-xl hover:bg-zen-accent/50 transition-all border border-transparent hover:border-white/5">
                             {/* Hidden Audio Controller */}
                             <AudioController
                                 sound={sound}
@@ -102,37 +103,43 @@ export default function SoundMixer() {
                                 volume={state.volume}
                             />
 
-                            <div className="flex items-center gap-3 mb-2">
+                            <div className="flex items-center gap-4">
                                 <button
                                     onClick={() => toggleSound(sound.id)}
-                                    className={`p-2 rounded-xl transition-all ${state.isPlaying
-                                        ? 'bg-zen-secondary text-white'
-                                        : 'bg-zen-bg text-zen-muted hover:text-zen-text hover:bg-zen-card'
+                                    className={`p-2 rounded-xl transition-all active:scale-95 ${state.isPlaying
+                                        ? 'bg-indigo-500 text-white'
+                                        : 'bg-zen-card text-zen-muted'
                                         }`}
                                 >
-                                    {state.isPlaying ? <Pause size={16} fill="currentColor" /> : <Play size={16} fill="currentColor" className="ml-0.5" />}
+                                    {state.isPlaying ? <Pause size={18} fill="currentColor" /> : <Play size={18} fill="currentColor" className="ml-0.5" />}
                                 </button>
-                                <div className={`p-2 rounded-full ${state.isPlaying ? 'text-zen-text' : 'text-zen-muted'}`}>
-                                    {sound.icon}
-                                </div>
-                                <span className={`text-sm font-medium ${state.isPlaying ? 'text-zen-text' : 'text-zen-muted'}`}>
-                                    {sound.name}
-                                </span>
-                            </div>
 
-                            <div className="flex items-center gap-3 px-1">
-                                <VolumeX size={14} className="text-zen-muted" />
-                                <input
-                                    type="range"
-                                    min="0"
-                                    max="1"
-                                    step="0.01"
-                                    value={state.volume}
-                                    onChange={(e) => changeVolume(sound.id, parseFloat(e.target.value))}
-                                    className="w-full h-1.5 bg-zen-bg rounded-full appearance-none cursor-pointer [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:w-3 [&::-webkit-slider-thumb]:h-3 [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:bg-zen-highlight"
-                                    disabled={!state.isPlaying && !activeSounds[sound.id]}
-                                />
-                                <Volume2 size={14} className="text-zen-muted" />
+                                <div className="flex-1 flex flex-col gap-2">
+                                    <div className="flex items-center gap-3">
+                                        <div className={`transition-colors ${state.isPlaying ? 'text-indigo-400' : 'text-zen-muted'}`}>
+                                            {sound.icon}
+                                        </div>
+                                        <span className={`text-sm font-medium ${state.isPlaying ? 'text-white' : 'text-zen-muted'}`}>
+                                            {sound.name}
+                                        </span>
+                                    </div>
+
+                                    <div className="flex items-center gap-3">
+                                        <input
+                                            type="range"
+                                            min="0"
+                                            max="1"
+                                            step="0.01"
+                                            value={state.volume}
+                                            onChange={(e) => changeVolume(sound.id, parseFloat(e.target.value))}
+                                            className="w-full h-1 bg-zen-bg rounded-full appearance-none cursor-pointer [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:w-2.5 [&::-webkit-slider-thumb]:h-2.5 [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:bg-white transition-opacity"
+                                            disabled={!state.isPlaying && !activeSounds[sound.id]}
+                                            style={{
+                                                background: `linear-gradient(to right, #818cf8 ${state.volume * 100}%, #1a1c23 ${state.volume * 100}%)`
+                                            }}
+                                        />
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     );
