@@ -20,10 +20,10 @@ export default function Home() {
       </header>
 
       <main className="max-w-[1600px] mx-auto grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-6 flex-1 w-full items-stretch">
-        <Timer />
-        <TaskList />
-        <SoundMixer />
-        <PrayerTimes />
+        <div className="h-[600px] min-h-0"><Timer /></div>
+        <div className="h-[600px] min-h-0"><TaskList /></div>
+        <div className="h-[600px] min-h-0"><SoundMixer /></div>
+        <div className="h-[600px] min-h-0"><PrayerTimes /></div>
       </main>
 
       <footer className="max-w-[1600px] mx-auto mt-20 flex items-center justify-between w-full text-zen-muted text-[10px] tracking-widest uppercase font-medium">
