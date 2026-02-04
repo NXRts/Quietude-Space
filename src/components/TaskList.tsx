@@ -35,25 +35,25 @@ export default function TaskList() {
     };
 
     return (
-        <div className="bg-zen-card p-6 rounded-3xl shadow-lg border border-zen-accent/10 min-h-[300px] flex flex-col">
-            <h2 className="text-xl font-medium mb-4 text-zen-text flex items-center gap-2">
-                <span className="w-1.5 h-6 bg-zen-primary rounded-full"></span>
+        <div className="bg-zen-card p-6 rounded-3xl shadow-lg border border-white/5 min-h-[300px] flex flex-col h-full">
+            <h2 className="text-xl font-medium mb-6 text-zen-text flex items-center gap-3">
+                <span className="w-1.5 h-6 bg-sky-400 rounded-full"></span>
                 Tasks
             </h2>
 
-            <form onSubmit={addTask} className="mb-4 relative">
+            <form onSubmit={addTask} className="mb-8 relative">
                 <input
                     type="text"
                     value={newTaskText}
                     onChange={(e) => setNewTaskText(e.target.value)}
                     placeholder="Add a new task..."
-                    className="w-full bg-zen-bg/50 rounded-xl py-3 px-4 pr-12 text-zen-text placeholder:text-zen-muted focus:outline-none focus:ring-1 focus:ring-zen-primary transition-all"
+                    className="w-full bg-zen-accent/50 rounded-xl py-3 px-5 pr-14 text-zen-text placeholder:text-zen-muted focus:outline-none focus:ring-1 focus:ring-zen-primary transition-all text-sm"
                 />
                 <button
                     type="submit"
-                    className="absolute right-2 top-1/2 -translate-y-1/2 p-1.5 bg-zen-primary/10 text-zen-primary rounded-lg hover:bg-zen-primary hover:text-white transition-colors"
+                    className="absolute right-2 top-1/2 -translate-y-1/2 p-2 bg-zen-primary/10 text-zen-primary rounded-lg hover:bg-zen-primary hover:text-white transition-all active:scale-95"
                 >
-                    <Plus size={18} />
+                    <Plus size={18} strokeWidth={2.5} />
                 </button>
             </form>
 

@@ -75,44 +75,41 @@ export default function PrayerTimes() {
     ];
 
     return (
-        <div className="bg-zen-card p-6 rounded-3xl shadow-lg border border-zen-accent/10 flex flex-col relative overflow-hidden">
-            {/* Background decoration */}
-            <div className="absolute top-0 right-0 w-32 h-32 bg-zen-primary/5 rounded-full blur-3xl -mr-16 -mt-16 pointer-events-none" />
-
+        <div className="bg-zen-card p-6 rounded-3xl shadow-lg border border-white/5 flex flex-col relative overflow-hidden h-full">
             {/* Header */}
-            <div className="flex items-center justify-between mb-6">
-                <h2 className="text-xl font-medium text-zen-text flex items-center gap-2">
-                    <span className="w-1.5 h-6 rounded-full bg-zen-secondary"></span>
+            <div className="flex items-center justify-between mb-8">
+                <h2 className="text-xl font-medium text-zen-text flex items-center gap-3">
+                    <span className="w-1.5 h-6 rounded-full bg-indigo-500"></span>
                     Prayer Times
                 </h2>
-                <div className="text-xs text-zen-muted text-right">
+                <div className="text-[10px] text-zen-muted text-right uppercase tracking-wider font-medium">
                     {prayerData?.date.hijri.weekday.en}, {prayerData?.date.readable}
                 </div>
             </div>
 
             {/* Search */}
-            <form onSubmit={handleSubmit} className="relative mb-6 space-y-2">
+            <form onSubmit={handleSubmit} className="mb-8 space-y-3">
                 <div className="relative">
                     <input
                         type="text"
                         value={searchCity}
                         onChange={(e) => setSearchCity(e.target.value)}
-                        placeholder="City..."
-                        className="w-full bg-zen-bg rounded-xl py-2 pl-9 pr-4 text-zen-text text-sm focus:outline-none focus:ring-2 focus:ring-zen-primary/30 transition-all border border-transparent focus:border-zen-primary/20"
+                        placeholder="Jakarta"
+                        className="w-full bg-zen-accent/30 rounded-xl py-2.5 pl-10 pr-4 text-zen-text text-sm focus:outline-none focus:ring-1 focus:ring-zen-primary transition-all border border-transparent"
                     />
-                    <MapPin size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-zen-muted" />
+                    <MapPin size={15} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-zen-muted" />
                 </div>
-                <div className="relative flex gap-2">
+                <div className="relative group flex items-center">
                     <input
                         type="text"
                         value={country}
                         onChange={(e) => setCountry(e.target.value)}
-                        placeholder="Country..."
-                        className="w-full bg-zen-bg rounded-xl py-2 pl-3 pr-10 text-zen-text text-sm focus:outline-none focus:ring-2 focus:ring-zen-primary/30 transition-all border border-transparent focus:border-zen-primary/20"
+                        placeholder="Indonesia"
+                        className="w-full bg-zen-accent/30 rounded-xl py-2.5 pl-4 pr-10 text-zen-text text-sm focus:outline-none focus:ring-1 focus:ring-zen-primary transition-all border border-transparent"
                     />
                     <button
                         type="submit"
-                        className="p-2 bg-zen-card hover:bg-zen-primary/20 text-zen-muted hover:text-zen-primary rounded-xl transition-colors shrink-0"
+                        className="absolute right-2 p-1.5 text-zen-muted hover:text-zen-primary transition-colors"
                     >
                         {loading ? <Loader2 size={18} className="animate-spin" /> : <Search size={18} />}
                     </button>
@@ -121,35 +118,29 @@ export default function PrayerTimes() {
 
             {/* Error Message */}
             {error && (
-                <div className="mb-4 p-3 bg-red-500/10 border border-red-500/20 text-red-200 text-sm rounded-xl text-center">
+                <div className="mb-4 p-3 bg-red-500/10 border border-red-500/20 text-red-400 text-xs rounded-xl text-center">
                     {error}
                 </div>
             )}
 
             {/* Prayer List */}
-            <div className="flex-1 space-y-3 overflow-y-auto custom-scrollbar pr-1">
+            <div className="flex-1 space-y-2.5 overflow-y-auto pr-1">
                 {prayers.map((prayer) => (
                     <div
                         key={prayer.name}
-                        className="flex items-center justify-between p-3 rounded-xl bg-zen-bg/50 border border-transparent hover:border-zen-accent/10 transition-all group"
+                        className="flex items-center justify-between p-3.5 rounded-xl bg-zen-accent/20 border border-transparent hover:border-white/5 transition-all group"
                     >
                         <div className="flex items-center gap-3">
-                            <div className="p-2 rounded-lg bg-zen-card group-hover:bg-zen-bg transition-colors">
+                            <div className="text-indigo-400">
                                 {prayer.icon}
                             </div>
-                            <span className="text-zen-text font-medium">{prayer.name}</span>
+                            <span className="text-zen-muted group-hover:text-white transition-colors text-sm font-medium">{prayer.name}</span>
                         </div>
-                        <span className="text-zen-highlight font-mono font-medium text-lg">
+                        <span className="text-white font-medium text-base">
                             {prayerData?.timings[prayer.name] || '--:--'}
                         </span>
                     </div>
                 ))}
-            </div>
-
-            <div className="mt-4 text-center">
-                <p className="text-xs text-zen-muted">
-                    Location: <span className="text-zen-primary font-medium">{city}, {country}</span>
-                </p>
             </div>
         </div>
     );
