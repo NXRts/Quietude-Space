@@ -1,8 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { CloudRain, Flame, Waves, Wind, Play, Pause, Coffee, Trees, Music, Bird } from 'lucide-react';
+import { CloudRain, Flame, Waves, Wind, Play, Pause, Coffee, Trees, Music, Bird, AlertCircle } from 'lucide-react';
 import { Sound } from '@/types';
 
-// Using local public sound files and fallback public URLs
 const AVAILABLE_SOUNDS: Sound[] = [
     { id: 'rain', name: 'Rain', src: '/sounds/rain.ogg', icon: <CloudRain size={20} /> },
     { id: 'fire', name: 'Fireplace', src: '/sounds/fire.ogg', icon: <Flame size={20} /> },
@@ -17,73 +16,110 @@ const AVAILABLE_SOUNDS: Sound[] = [
 const AudioController = ({
     sound,
     isPlaying,
-    volume
+    volume,
+    onError
 }: {
     sound: Sound;
     isPlaying: boolean;
     volume: number;
+    onError: (id: string, message: string) => void;
 }) => {
     const audioRef = useRef<HTMLAudioElement | null>(null);
 
     useEffect(() => {
-        // Initialize audio object once
-        const audio = new Audio(sound.src);
+        const audio = new Audio();
+        // Add crossOrigin to handle potential CORS issues with external URLs
+        audio.crossOrigin = "anonymous";
+        audio.src = sound.src;
         audio.loop = true;
-        audio.volume = volume;
+        // Ensure volume is finite and between 0 and 1
+        audio.volume = isFinite(volume) ? Math.max(0, Math.min(1, volume)) : 0.5;
+
+        audio.addEventListener('error', (e) => {
+            const error = audio.error;
+            let message = "Unknown error";
+            if (error) {
+                switch (error.code) {
+                    case 1: message = "Load aborted"; break;
+                    case 2: message = "Network error"; break;
+                    case 3: message = "Decode error"; break;
+                    case 4: message = "Source not supported"; break;
+                }
+            }
+            console.error(`Audio error for ${sound.name}:`, message);
+            onError(sound.id, message);
+        });
+
         audioRef.current = audio;
 
         return () => {
             audio.pause();
+            audio.src = ""; // Clear source to stop downloads
             audioRef.current = null;
         };
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [sound.src]); // Re-init if src changes (unlikely)
+    }, [sound.src]);
 
     useEffect(() => {
         if (audioRef.current) {
             if (isPlaying) {
-                // Handle promise to avoid "play request interrupted" errors
                 const playPromise = audioRef.current.play();
                 if (playPromise !== undefined) {
                     playPromise.catch(error => {
-                        console.error("Audio play failed:", error);
+                        console.error(`Play failed for ${sound.name}:`, error);
+                        onError(sound.id, error.message || "Playback failed");
                     });
                 }
             } else {
                 audioRef.current.pause();
             }
         }
-    }, [isPlaying]);
+    }, [isPlaying, sound.id]); // Fix: sound.id for better reactivity if sources swap
 
     useEffect(() => {
         if (audioRef.current) {
-            audioRef.current.volume = volume;
+            audioRef.current.volume = isFinite(volume) ? Math.max(0, Math.min(1, volume)) : 0.5;
         }
     }, [volume]);
 
-    return null; // Logic only component
+    return null;
 };
 
 export default function SoundMixer() {
-    const [activeSounds, setActiveSounds] = useState<Record<string, { isPlaying: boolean; volume: number }>>({});
+    const [activeSounds, setActiveSounds] = useState<Record<string, { isPlaying: boolean; volume: number; error?: string }>>({});
+
+    const handleError = (id: string, message: string) => {
+        setActiveSounds(prev => {
+            const current = prev[id] || { isPlaying: false, volume: 0.5 };
+            // Avoid infinite loops if error keeps firing
+            if (current.error === message) return prev;
+            return {
+                ...prev,
+                [id]: { ...current, isPlaying: false, error: message }
+            };
+        });
+    };
 
     const toggleSound = (id: string) => {
         setActiveSounds(prev => {
+            const current = prev[id] || { isPlaying: false, volume: 0.5 };
+
             // Default to playing with 50% volume if starting
             if (!prev[id]) {
                 return { ...prev, [id]: { isPlaying: true, volume: 0.5 } };
             }
-            return { ...prev, [id]: { ...prev[id], isPlaying: !prev[id].isPlaying } };
+            // If there's an error, try to clear it and re-play
+            if (current.error) {
+                return { ...prev, [id]: { ...current, isPlaying: true, error: undefined } };
+            }
+            return { ...prev, [id]: { ...current, isPlaying: !current.isPlaying } };
         });
     };
 
     const changeVolume = (id: string, value: number) => {
         setActiveSounds(prev => {
-            // If changing volume, ensure sound entry exists (even if paused)
-            if (!prev[id]) {
-                return { ...prev, [id]: { isPlaying: false, volume: value } };
-            }
-            return { ...prev, [id]: { ...prev[id], volume: value } };
+            const current = prev[id] || { isPlaying: false, volume: 0.5 };
+            return { ...prev, [id]: { ...current, volume: value } };
         });
     };
 
@@ -99,12 +135,13 @@ export default function SoundMixer() {
                     const state = activeSounds[sound.id] || { isPlaying: false, volume: 0.5 };
 
                     return (
-                        <div key={sound.id} className="group bg-zen-accent/30 p-4 rounded-xl hover:bg-zen-accent/50 transition-all border border-transparent hover:border-white/5">
+                        <div key={sound.id} className={`group bg-zen-accent/30 p-4 rounded-xl hover:bg-zen-accent/50 transition-all border ${state.error ? 'border-red-500/30' : 'border-transparent hover:border-white/5'}`}>
                             {/* Hidden Audio Controller */}
                             <AudioController
                                 sound={sound}
                                 isPlaying={state.isPlaying}
                                 volume={state.volume}
+                                onError={handleError}
                             />
 
                             <div className="flex items-center gap-4">
@@ -112,20 +149,32 @@ export default function SoundMixer() {
                                     onClick={() => toggleSound(sound.id)}
                                     className={`p-2 rounded-xl transition-all active:scale-95 ${state.isPlaying
                                         ? 'bg-purple-600 text-white shadow-[0_0_12px_rgba(147,51,234,0.3)]'
-                                        : 'bg-zen-card text-zen-muted'
+                                        : state.error
+                                            ? 'bg-red-500/20 text-red-400'
+                                            : 'bg-zen-card text-zen-muted'
                                         }`}
                                 >
                                     {state.isPlaying ? <Pause size={18} strokeWidth={2.5} /> : <Play size={18} strokeWidth={2.5} className="ml-0.5" />}
                                 </button>
 
                                 <div className="flex-1 flex flex-col gap-2">
-                                    <div className="flex items-center gap-3">
-                                        <div className={`transition-colors ${state.isPlaying ? 'text-purple-400' : 'text-zen-muted'}`}>
-                                            {sound.icon}
+                                    <div className="flex items-center justify-between">
+                                        <div className="flex items-center gap-3">
+                                            <div className={`transition-colors ${state.isPlaying ? 'text-purple-400' : state.error ? 'text-red-400/60' : 'text-zen-muted'}`}>
+                                                {sound.icon}
+                                            </div>
+                                            <span className={`text-sm font-medium transition-colors ${state.isPlaying ? 'text-white' : state.error ? 'text-red-400' : 'text-zen-muted'}`}>
+                                                {sound.name}
+                                            </span>
                                         </div>
-                                        <span className={`text-sm font-medium transition-colors ${state.isPlaying ? 'text-white' : 'text-zen-muted'}`}>
-                                            {sound.name}
-                                        </span>
+                                        {state.error && (
+                                            <div className="group/error relative">
+                                                <AlertCircle size={14} className="text-red-500 cursor-help" />
+                                                <div className="absolute bottom-full right-0 mb-2 w-48 p-2 bg-red-900 text-red-100 text-[10px] rounded shadow-xl opacity-0 group-hover/error:opacity-100 pointer-events-none transition-opacity z-50">
+                                                    {state.error}
+                                                </div>
+                                            </div>
+                                        )}
                                     </div>
 
                                     <div className="flex items-center gap-3">
@@ -137,9 +186,11 @@ export default function SoundMixer() {
                                             value={state.volume}
                                             onChange={(e) => changeVolume(sound.id, parseFloat(e.target.value))}
                                             className="w-full h-1 bg-zen-bg rounded-full appearance-none cursor-pointer [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:w-2.5 [&::-webkit-slider-thumb]:h-2.5 [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:bg-white transition-opacity"
-                                            disabled={!state.isPlaying && !activeSounds[sound.id]}
+                                            disabled={!!state.error}
                                             style={{
-                                                background: `linear-gradient(to right, #a855f7 ${state.volume * 100}%, #1a1c23 ${state.volume * 100}%)`
+                                                background: state.error
+                                                    ? '#450a0a'
+                                                    : `linear-gradient(to right, #a855f7 ${state.volume * 100}%, #1a1c23 ${state.volume * 100}%)`
                                             }}
                                         />
                                     </div>
