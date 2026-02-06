@@ -17,9 +17,9 @@ export default function Home() {
             Reclaim your concentration
           </p>
         </div>
-        <div className="flex items-center gap-6">
+        <div className="flex items-center gap-3 md:gap-6">
           <Clock />
-          <div className="w-12 h-12 rounded-full bg-blue-500/80 blur-lg animate-pulse"></div>
+          <div className="w-8 h-8 md:w-12 md:h-12 rounded-full bg-blue-500/80 blur-md md:blur-lg animate-pulse"></div>
         </div>
       </header>
 

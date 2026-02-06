@@ -24,10 +24,10 @@ export default function Clock() {
     const seconds = time.getSeconds().toString().padStart(2, '0');
 
     return (
-        <div className="flex items-baseline gap-2">
-            <div className="text-white text-lg font-medium tabular-nums">
+        <div className="flex items-baseline gap-1.5 md:gap-2">
+            <div className="text-white text-base md:text-lg font-medium tabular-nums tracking-tight">
                 {hours}:{minutes}
-                <span className="text-zen-muted text-sm ml-1 font-light">{seconds}</span>
+                <span className="text-zen-muted text-[10px] md:text-sm ml-1 font-light opacity-80">{seconds}</span>
             </div>
         </div>
     );
