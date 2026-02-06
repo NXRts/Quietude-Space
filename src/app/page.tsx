@@ -3,6 +3,7 @@ import Timer from '@/components/Timer';
 import TaskList from '@/components/TaskList';
 import SoundMixer from '@/components/SoundMixer';
 import PrayerTimes from '@/components/PrayerTimes';
+import Clock from '@/components/Clock';
 
 export default function Home() {
   return (
@@ -16,7 +17,10 @@ export default function Home() {
             Reclaim your concentration
           </p>
         </div>
-        <div className="w-12 h-12 rounded-full bg-blue-500/80 blur-lg animate-pulse"></div>
+        <div className="flex items-center gap-6">
+          <Clock />
+          <div className="w-12 h-12 rounded-full bg-blue-500/80 blur-lg animate-pulse"></div>
+        </div>
       </header>
 
       <main className="max-w-[1600px] mx-auto grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-6 flex-1 w-full items-stretch">
