@@ -77,7 +77,7 @@ export default function MasterAudio() {
             </div>
 
             {/* Timer Dropdown */}
-            <div className="bg-zen-card/80 backdrop-blur-md border border-white/5 px-6 py-3 rounded-2xl flex items-center justify-between md:justify-start gap-4 group hover:border-white/10 transition-all flex-1 md:flex-initial md:min-w-[280px]">
+            <div className="bg-zen-card/80 backdrop-blur-md border border-white/5 px-6 py-3 rounded-2xl flex items-center justify-between md:justify-start gap-4 group hover:border-white/10 transition-all flex-1 md:flex-initial md:min-w-[280px] relative z-[60]">
                 <div className="flex items-center gap-4">
                     <Clock className="text-zen-muted group-hover:text-blue-400 transition-colors" size={20} />
                     <div className="relative" ref={dropdownRef}>
@@ -120,7 +120,7 @@ export default function MasterAudio() {
             </div>
 
             {/* Action Buttons Container */}
-            <div className="flex flex-col sm:flex-row gap-3 md:contents">
+            <div className="flex flex-col sm:flex-row gap-3 md:contents relative z-10">
                 {/* Play/Pause All Button */}
                 <button
                     onClick={isAnyPlaying ? stopAll : playAll}
