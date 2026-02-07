@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { Volume2, Clock, Play, Pause, RotateCcw, ChevronDown } from 'lucide-react';
 import { useAudio } from '@/context/AudioContext';
 
@@ -25,6 +25,9 @@ export default function MasterAudio() {
         timeLeft
     } = useAudio();
 
+    const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+    const dropdownRef = useRef<HTMLDivElement>(null);
+
     const isAnyPlaying = Object.values(activeSounds).some(s => s.isPlaying);
 
     const formatTime = (seconds: number) => {
@@ -33,8 +36,25 @@ export default function MasterAudio() {
         return `${mins}:${secs.toString().padStart(2, '0')}`;
     };
 
+    const selectedOption = TIMER_OPTIONS.find(opt => opt.value === timerDuration) || TIMER_OPTIONS[0];
+
+    useEffect(() => {
+        const handleClickOutside = (event: MouseEvent) => {
+            if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
+                setIsDropdownOpen(false);
+            }
+        };
+
+        if (isDropdownOpen) {
+            document.addEventListener('mousedown', handleClickOutside);
+        }
+        return () => {
+            document.removeEventListener('mousedown', handleClickOutside);
+        };
+    }, [isDropdownOpen]);
+
     return (
-        <div className="max-w-[1600px] mx-auto w-full mb-8 grid grid-cols-1 md:flex md:flex-wrap items-stretch md:items-center gap-3 md:gap-4 animate-in fade-in slide-in-from-top-4 duration-700">
+        <div className="max-w-[1600px] mx-auto w-full mb-8 grid grid-cols-1 md:flex md:flex-wrap items-stretch md:items-center gap-3 md:gap-4 animate-in fade-in slide-in-from-top-4 duration-700 relative z-50">
             {/* Master Volume */}
             <div className="bg-zen-card/80 backdrop-blur-md border border-white/5 px-6 py-3 rounded-2xl flex items-center gap-4 group hover:border-white/10 transition-all flex-1 md:flex-initial md:min-w-[320px]">
                 <Volume2 className="text-zen-muted group-hover:text-purple-400 transition-colors" size={20} />
@@ -60,19 +80,36 @@ export default function MasterAudio() {
             <div className="bg-zen-card/80 backdrop-blur-md border border-white/5 px-6 py-3 rounded-2xl flex items-center justify-between md:justify-start gap-4 group hover:border-white/10 transition-all flex-1 md:flex-initial md:min-w-[280px]">
                 <div className="flex items-center gap-4">
                     <Clock className="text-zen-muted group-hover:text-blue-400 transition-colors" size={20} />
-                    <div className="relative flex items-center gap-2">
-                        <select
-                            value={timerDuration}
-                            onChange={(e) => setTimerDuration(parseInt(e.target.value))}
-                            className="bg-zen-bg text-sm text-white px-4 py-1.5 rounded-xl border border-white/10 focus:outline-none focus:border-purple-500/50 appearance-none pr-10 cursor-pointer min-w-[140px]"
+                    <div className="relative" ref={dropdownRef}>
+                        <button
+                            onClick={() => setIsDropdownOpen(!isDropdownOpen)}
+                            className="bg-zen-bg text-sm text-white px-4 py-2 rounded-xl border border-white/10 hover:border-purple-500/50 focus:outline-none transition-all flex items-center justify-between gap-3 min-w-[150px]"
                         >
-                            {TIMER_OPTIONS.map(opt => (
-                                <option key={opt.value} value={opt.value} className="bg-zen-bg">
-                                    {opt.label}
-                                </option>
-                            ))}
-                        </select>
-                        <ChevronDown size={14} className="absolute right-3 text-zen-muted pointer-events-none" />
+                            <span>{selectedOption.label}</span>
+                            <ChevronDown size={14} className={`text-zen-muted transition-transform duration-300 ${isDropdownOpen ? 'rotate-180' : ''}`} />
+                        </button>
+
+                        {isDropdownOpen && (
+                            <div className="absolute top-full left-0 mt-2 w-full bg-[#16181d] border border-white/10 rounded-xl shadow-[0_20px_50px_rgba(0,0,0,0.8)] overflow-hidden z-[999] animate-in fade-in zoom-in-95 duration-200">
+                                <ul className="py-1 bg-[#16181d] opacity-100">
+                                    {TIMER_OPTIONS.map((opt) => (
+                                        <li
+                                            key={opt.value}
+                                            onClick={() => {
+                                                setTimerDuration(opt.value);
+                                                setIsDropdownOpen(false);
+                                            }}
+                                            className={`px-4 py-2.5 text-sm cursor-pointer transition-colors ${timerDuration === opt.value
+                                                ? 'bg-purple-500 text-white'
+                                                : 'text-zen-muted hover:bg-white/5 hover:text-white'
+                                                }`}
+                                        >
+                                            {opt.label}
+                                        </li>
+                                    ))}
+                                </ul>
+                            </div>
+                        )}
                     </div>
                 </div>
                 {timeLeft > 0 && (
